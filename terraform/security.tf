@@ -3,13 +3,22 @@ resource "aws_security_group" "cp" {
   name   = "${var.name}-cp-sg"
   vpc_id = aws_vpc.this.id
 
-  # Kubernetes API (6443) - dolazi preko public NLB-a, pa source može biti tvoj IP.
+  # 6443 from your public IP (admin)
   ingress {
-    description = "Kubernetes API"
+    description = "Kubernetes API from admin IP"
     from_port   = 6443
     to_port     = 6443
     protocol    = "tcp"
     cidr_blocks = [var.allowed_api_cidr]
+  }
+
+  # 6443 from inside VPC (workers)
+  ingress {
+    description = "Kubernetes API from VPC"
+    from_port   = 6443
+    to_port     = 6443
+    protocol    = "tcp"
+    cidr_blocks = [var.vpc_cidr]
   }
 
   # etcd peer/client
