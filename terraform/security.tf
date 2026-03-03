@@ -81,6 +81,15 @@ resource "aws_security_group" "wk" {
   name   = "${var.name}-wk-sg"
   vpc_id = aws_vpc.this.id
 
+  # Allow Pod CIDR traffic (Pod-to-Pod across nodes)
+  ingress {
+    description = "All traffic from Pod CIDR (lab)"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["10.200.0.0/16"]
+  }
+
   # kubelet
   ingress {
     description = "kubelet"

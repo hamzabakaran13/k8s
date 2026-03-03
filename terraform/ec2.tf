@@ -26,6 +26,9 @@ resource "aws_instance" "cp" {
 
   associate_public_ip_address = false
 
+  # ✅ IMPORTANT: allow this instance to route traffic (pod-to-pod cross-node)
+  source_dest_check = false
+
 
   tags = {
     Name = "${var.name}-cp-${count.index + 1}"
@@ -45,6 +48,8 @@ resource "aws_instance" "wk" {
   iam_instance_profile = aws_iam_instance_profile.ssm_profile.name
 
   associate_public_ip_address = false
+  # ✅ IMPORTANT: allow this instance to route traffic (pod-to-pod cross-node)
+  source_dest_check = false
 
 
   tags = {
